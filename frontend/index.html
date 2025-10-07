@@ -28,6 +28,11 @@
           <input type="email" id="signup-email" placeholder="Email" required>
           <input type="password" id="signup-password" placeholder="Пароль (мин. 6 символов)" required>
           <input type="password" id="signup-confirm-password" placeholder="Подтвердите пароль" required>
+          <div class="role-selection">
+            <button type="button" class="role-btn" data-role="employer">Компания</button>
+            <button type="button" class="role-btn" data-role="employee">Работник</button>
+          </div>
+          <input type="hidden" id="signup-role" name="role" required>
           <button type="submit" class="auth-btn">Зарегистрироваться</button>
           <p class="error-message" id="signup-error"></p>
           <p class="switch-link">У меня уже есть аккаунт. <a href="#" id="switch-to-signin">Войти</a></p>
@@ -45,16 +50,7 @@
       </div>
     </div>
 
-    <div id="main-content" style="display: none;">
-      <div id="role-selection" class="hero">
-        <h2>Добро пожаловать в МеждуДелом</h2>
-        <p>Выберите вашу роль, чтобы начать работу</p>
-        <div class="button-container">
-          <button class="role-btn" id="employer-btn">Я работодатель</button>
-          <button class="role-btn" id="employee-btn">Я работник</button>
-        </div>
-      </div>
-    </div>
+    <div id="main-content" style="display: none;"></div>
   </main>
 
   <footer>
@@ -64,6 +60,8 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAk9i_dYfJWUTYkonMH68ubnlJFIkAh-TI",
@@ -74,8 +72,10 @@
       appId: "1:310699969149:web:06993508cf7208e181bf14",
       measurementId: "G-EJ5K12N9PY"
     };
+
     firebase.initializeApp(firebaseConfig);
   </script>
+
   <script src="app.js"></script>
 </body>
 </html>

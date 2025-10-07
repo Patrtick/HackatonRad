@@ -1,7 +1,7 @@
 @echo off
 cd /d %~dp0
 echo ==============================
-echo Rebuilding and starting Terraform Log Viewer...
+echo Rebuilding and starting...
 echo ==============================
 
 docker compose down

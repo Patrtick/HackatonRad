@@ -1,7 +1,7 @@
 @echo off
 cd /d %~dp0
 echo ==============================
-echo Stopping Terraform Log Viewer...
+echo Stopping...
 echo ==============================
 
 docker compose down

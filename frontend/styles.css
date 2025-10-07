@@ -8,20 +8,8 @@ html, body {
   color: #333;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   font-size: 16px;
-}
-
-/* --- Анимации --- */
-@keyframes fadeSlideDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-15px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  overflow: hidden;
 }
 
 /* --- Шапка --- */
@@ -32,40 +20,34 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-shrink: 0;
   min-height: 60px;
-  animation: fadeSlideDown 0.6s ease forwards;
 }
 
-/* --- Название / подзаголовок слева --- */
 .title-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  line-height: 1.2;
 }
 
 header h1 {
   margin: 0;
   font-size: 24px;
   font-weight: 800;
-  color: #ffffff;
 }
 
 .subtitle {
   font-size: 14px;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.9);
   margin-top: 2px;
+  color: rgba(255, 255, 255, 0.9);
 }
 
-/* --- Кнопка выйти --- */
+/* --- Кнопка "Выйти" --- */
 .logout-btn {
   background-color: #305a9e;
   color: white;
-  padding: 6px 12px;
   border: none;
   border-radius: 6px;
+  padding: 6px 12px;
   font-size: 14px;
   cursor: pointer;
   transition: 0.3s;
@@ -98,12 +80,11 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-height: 85vh;
+  max-height: calc(100vh - 140px);
   overflow-y: auto;
-  animation: fadeSlideDown 0.8s ease forwards;
+  box-sizing: border-box;
 }
 
-/* Заголовок внутри hero */
 .hero h2 {
   color: #1a3c6e;
   margin-bottom: 15px;
@@ -117,7 +98,6 @@ main {
   margin-bottom: 20px;
 }
 
-/* Заголовки форм (Регистрация / Вход) */
 .hero h3 {
   color: #1a3c6e;
   font-size: 18px;
@@ -143,16 +123,29 @@ main {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.auth-form input {
+.auth-form[style*="display: none"] {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.auth-form[style*="display: flex"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.auth-form input,
+.auth-form select {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ddd;
   font-size: 14px;
 }
 
-.auth-btn {
+.auth-btn,
+.role-btn {
   background-color: #1a3c6e;
   color: white;
   border: none;
@@ -163,9 +156,64 @@ main {
   transition: 0.3s;
 }
 
-.auth-btn:hover {
+.auth-btn:hover,
+.role-btn:hover {
   background-color: #305a9e;
   transform: translateY(-1px);
+}
+
+/* --- Выбор роли --- */
+.role-selection {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.role-btn {
+  position: relative;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #f5f7fa;
+  color: #1a3c6e;
+  border: 2px solid #1a3c6e;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.role-btn:hover {
+  background-color: #1a3c6e;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.role-btn.selected {
+  background-color: #1a3c6e;
+  color: white;
+  border-color: #305a9e;
+  transform: scale(1.05);
+}
+
+.role-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.role-btn:hover::after {
+  width: 200px;
+  height: 200px;
 }
 
 /* --- Переключатели --- */
@@ -189,28 +237,22 @@ main {
   font-size: 13px;
 }
 
-/* --- Кнопки ролей --- */
-.button-container {
+/* --- Секции кабинета --- */
+.section-content {
   display: flex;
-  justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 15px;
 }
 
-.role-btn {
-  background-color: #1a3c6e;
-  color: white;
-  border: none;
+.card {
+  background: #f5f7fa;
   border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.role-btn:hover {
-  background-color: #305a9e;
-  transform: translateY(-1px);
+  padding: 10px 15px;
+  width: 140px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
 }
 
 /* --- Футер --- */
@@ -220,8 +262,6 @@ footer {
   text-align: center;
   padding: 4px 0;
   font-size: 12px;
-  flex-shrink: 0;
-  line-height: 1.2;
 }
 
 /* --- Адаптивность --- */
@@ -229,5 +269,6 @@ footer {
   header h1 { font-size: 20px; }
   .subtitle { font-size: 12px; }
   .hero { padding: 15px; max-width: 95%; }
-  .role-btn, .auth-btn { padding: 8px 16px; font-size: 13px; }
+  .role-btn,
+  .auth-btn { padding: 8px 16px; font-size: 13px; }
 }
