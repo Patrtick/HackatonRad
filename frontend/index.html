@@ -3,32 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>МеждуДелом - Личный кабинет</title>
-  <link rel="stylesheet" href="/styles.css">
+  <title>МеждуДелом</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>МеждуДелом</h1>
-    <p class="subtitle">Ваш партнер в управлении удаленными командами</p>
+    <div class="title-container">
+      <h1>МеждуДелом</h1>
+      <span class="subtitle">Ваш партнёр в работе за рубежом</span>
+    </div>
+    <button id="logout-btn" class="logout-btn" style="display: none;">Выйти</button>
   </header>
 
-  <main id="main-content">
-    <section id="role-selection">
+  <main>
+    <div id="auth-container">
       <div class="hero">
+        <h2>Добро пожаловать</h2>
+        <p>Зарегистрируйтесь или войдите, чтобы начать работу</p>
+
+        <!-- Регистрация -->
+        <form id="signup-form" class="auth-form">
+          <h3>Регистрация</h3>
+          <input type="email" id="signup-email" placeholder="Email" required>
+          <input type="password" id="signup-password" placeholder="Пароль (мин. 6 символов)" required>
+          <input type="password" id="signup-confirm-password" placeholder="Подтвердите пароль" required>
+          <button type="submit" class="auth-btn">Зарегистрироваться</button>
+          <p class="error-message" id="signup-error"></p>
+          <p class="switch-link">У меня уже есть аккаунт. <a href="#" id="switch-to-signin">Войти</a></p>
+        </form>
+
+        <!-- Вход -->
+        <form id="signin-form" class="auth-form" style="display: none;">
+          <h3>Вход</h3>
+          <input type="email" id="signin-email" placeholder="Email" required>
+          <input type="password" id="signin-password" placeholder="Пароль" required>
+          <button type="submit" class="auth-btn">Войти</button>
+          <p class="error-message" id="signin-error"></p>
+          <p class="switch-link">Нет аккаунта? <a href="#" id="switch-to-signup">Зарегистрироваться</a></p>
+        </form>
+      </div>
+    </div>
+
+    <div id="main-content" style="display: none;">
+      <div id="role-selection" class="hero">
         <h2>Добро пожаловать в МеждуДелом</h2>
         <p>Выберите вашу роль, чтобы начать работу</p>
         <div class="button-container">
-          <button id="employer-btn" class="role-btn">Я работодатель</button>
-          <button id="employee-btn" class="role-btn">Я работник</button>
+          <button class="role-btn" id="employer-btn">Я работодатель</button>
+          <button class="role-btn" id="employee-btn">Я работник</button>
         </div>
       </div>
-    </section>
+    </div>
   </main>
 
   <footer>
-    <p>&copy; 2025 МеждуДелом. Все права защищены.</p>
+    <p>© 2025 МеждуДелом. Все права защищены.</p>
   </footer>
 
-  <script src="/app.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAk9i_dYfJWUTYkonMH68ubnlJFIkAh-TI",
+      authDomain: "hackatonrad.firebaseapp.com",
+      projectId: "hackatonrad",
+      storageBucket: "hackatonrad.firebasestorage.app",
+      messagingSenderId: "310699969149",
+      appId: "1:310699969149:web:06993508cf7208e181bf14",
+      measurementId: "G-EJ5K12N9PY"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="app.js"></script>
 </body>
 </html>
