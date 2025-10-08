@@ -254,6 +254,13 @@ main {
   width: 140px;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
 }
 
 /* --- Футер --- */
@@ -265,6 +272,157 @@ footer {
   font-size: 12px;
 }
 
+/* --- Стили для приглашений и чатов --- */
+#invitations-container,
+#chats-container {
+  padding: 0;
+  margin: 0;
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #1a3c6e transparent;
+}
+
+#invitations-container::-webkit-scrollbar,
+#chats-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+#invitations-container::-webkit-scrollbar-track,
+#chats-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#invitations-container::-webkit-scrollbar-thumb,
+#chats-container::-webkit-scrollbar-thumb {
+  background-color: #1a3c6e;
+  border-radius: 4px;
+}
+
+.invitation-item,
+.chat-item {
+  padding: 16px;
+  border: 1px solid #ddd;
+  margin: 10px 0;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.invitation-item {
+  border-left: 4px solid #1a3c6e;
+}
+
+.invitation-item:hover,
+.chat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* --- Кнопка "Назад к чатам" --- */
+.back-to-chats-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.back-to-chats-btn:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
+/* --- Окно чата --- */
+#chat-section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  box-sizing: border-box;
+  max-height: calc(100vh - 120px);
+}
+
+#chat-messages {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  overflow-y: auto;
+  background: white;
+  margin-bottom: 15px;
+  min-height: 250px;
+  max-height: calc(100vh - 250px);
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: #1a3c6e transparent;
+}
+
+#chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+  background-color: #1a3c6e;
+  border-radius: 4px;
+}
+
+#message-input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* --- Кнопка очистки списка приглашений --- */
+.clear-invitations-btn {
+  background: #e9ecef;
+  color: #495057;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 10px;
+  transition: background 0.2s ease;
+}
+
+.clear-invitations-btn:hover {
+  background: #dee2e6;
+}
+
+/* --- Список сотрудников --- */
+.employees-list {
+  margin-top: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.employees-list h3 {
+  margin-top: 0;
+  color: #1a3c6e;
+}
+
+.employee-email {
+  display: block;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.employee-email:last-child {
+  border-bottom: none;
+}
+
 /* --- Адаптивность --- */
 @media (max-width: 768px) {
   header h1 { font-size: 20px; }
@@ -272,35 +430,6 @@ footer {
   .hero { padding: 12px; max-width: 95%; }
   .role-btn,
   .auth-btn { padding: 8px 16px; font-size: 13px; }
-}
-/* Стили для чата */
-.chat-item:hover, .invitation-item:hover {
-  background-color: #f8f9fa;
-  transform: translateY(-1px);
-  transition: all 0.2s ease;
-}
-
-#chat-messages {
-  background: linear-gradient(135deg, #f5f7fa 0%, #e6f0fa 100%);
-}
-
-/* Анимации */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.invitation-item, .chat-item {
-  animation: fadeIn 0.3s ease;
-}
-
-/* Адаптивность для чата */
-@media (max-width: 768px) {
-  #chat-messages {
-    height: 300px;
-  }
-  
-  .chat-item, .invitation-item {
-    padding: 10px !important;
-  }
+  .card { width: 120px; padding: 8px 12px; }
+  #chat-messages { max-height: 300px; }
 }
