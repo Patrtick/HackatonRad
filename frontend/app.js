@@ -166,203 +166,290 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Кабинет компании
-  function loadEmployerSection(uid, userData) {
-    const mainContent = document.getElementById('main-content');
-    mainContent.innerHTML = `
-      <section id="employer">
-        <h2>Кабинет компании</h2>
-        <div class="section-content">
-          <div class="card" onclick="showInviteForm()">
-            <h3>📧 Пригласить работника</h3>
-            <p>Отправьте приглашение по email</p>
-          </div>
-          <div class="card" onclick="showActiveChats()">
-            <h3>💬 Активные чаты</h3>
-            <p>Общайтесь с работниками</p>
-          </div>
-          <div class="card" onclick="showEmployees()">
-            <h3>👥 Сотрудники</h3>
-            <p>Управление сотрудниками</p>
-          </div>
-          <div class="card">
-            <h3>📊 Отчётность</h3>
-            <p>Формируйте отчёты</p>
-          </div>
+    // Кабинет компании
+    function loadEmployerSection(uid, userData) {
+        const mainContent = document.getElementById('main-content');
+        mainContent.innerHTML = `
+    <section id="employer">
+      <h2>Кабинет компании</h2>
+      <div class="section-content">
+        <div class="card" onclick="showInviteForm()">
+          <h3>📧 Пригласить работника</h3>
+          <p>Отправьте приглашение по email</p>
         </div>
-        <div id="employer-content"></div>
-      </section>
+        <div class="card" onclick="showActiveChats()">
+          <h3>💬 Активные чаты</h3>
+          <p>Общайтесь с работниками</p>
+        </div>
+        <div class="card" onclick="showEmployees()">
+          <h3>👥 Сотрудники</h3>
+          <p>Управление сотрудниками</p>
+        </div>
+        <div class="card" onclick="showEmployeeDocuments()">
+          <h3>📄 Документы сотрудников</h3>
+          <p>Просмотр документов</p>
+        </div>
+      </div>
+      <div id="employer-content"></div>
+    </section>
+  `;
+
+        window.showInviteForm = showInviteForm;
+        window.showActiveChats = showActiveChats;
+        window.showEmployees = showEmployees;
+        window.showEmployeeDocuments = showEmployeeDocuments;
+
+        function showInviteForm() {
+            const content = document.getElementById('employer-content');
+            content.innerHTML = `
+      <div class="invite-form" style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h3>Отправить приглашение</h3>
+        <input type="email" id="employee-email" placeholder="Email работника" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+        <textarea id="invite-message" placeholder="Сообщение приглашения (опционально)" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; height: 80px; font-size: 14px; resize: vertical;"></textarea>
+        <button onclick="sendInvitation()" style="background: #1a3c6e; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-right: 10px;">Отправить приглашение</button>
+        <button onclick="clearInviteForm()" style="background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 14px;">Очистить</button>
+        <div id="invite-result" style="margin-top: 15px; min-height: 20px;"></div>
+      </div>
     `;
+        }
 
-    window.showInviteForm = showInviteForm;
-    window.showActiveChats = showActiveChats;
-    window.showEmployees = showEmployees;
-
-    function showInviteForm() {
-      const content = document.getElementById('employer-content');
-      content.innerHTML = `
-        <div class="invite-form" style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-          <h3>Отправить приглашение</h3>
-          <input type="email" id="employee-email" placeholder="Email работника" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
-          <textarea id="invite-message" placeholder="Сообщение приглашения (опционально)" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; height: 80px; font-size: 14px; resize: vertical;"></textarea>
-          <button onclick="sendInvitation()" style="background: #1a3c6e; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-right: 10px;">Отправить приглашение</button>
-          <button onclick="clearInviteForm()" style="background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 14px;">Очистить</button>
-          <div id="invite-result" style="margin-top: 15px; min-height: 20px;"></div>
+        function showActiveChats() {
+            const content = document.getElementById('employer-content');
+            content.innerHTML = `
+      <div class="chats-list" style="margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h3>Активные чаты</h3>
+          <button onclick="refreshChats()" style="background: #1a3c6e; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 12px;">🔄 Обновить</button>
         </div>
-      `;
-    }
+        <div id="chats-container" style="max-height: 500px; overflow-y: auto;"></div>
+      </div>
+    `;
+            loadEmployerChats(uid);
+        }
 
-    function showActiveChats() {
-      const content = document.getElementById('employer-content');
-      content.innerHTML = `
-        <div class="chats-list" style="margin-top: 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3>Активные чаты</h3>
-            <button onclick="refreshChats()" style="background: #1a3c6e; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 12px;">🔄 Обновить</button>
-          </div>
-          <div id="chats-container" style="max-height: 500px; overflow-y: auto;"></div>
+        function showEmployees() {
+            const content = document.getElementById('employer-content');
+            content.innerHTML = `
+      <div class="employees-list">
+        <h3>Сотрудники</h3>
+        <div id="employees-emails" style="max-height: 400px; overflow-y: auto; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <p style="text-align: center; color: #666;">⏳ Загрузка сотрудников...</p>
         </div>
-      `;
-      loadEmployerChats(uid);
-    }
+      </div>
+    `;
+            loadEmployees(uid);
+        }
 
-    function showEmployees() {
-      const content = document.getElementById('employer-content');
-      content.innerHTML = `
-        <div class="employees-list">
-          <h3>Сотрудники</h3>
-          <div id="employees-emails" style="max-height: 400px; overflow-y: auto; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <p style="text-align: center; color: #666;">⏳ Загрузка сотрудников...</p>
-          </div>
+        function showEmployeeDocuments() {
+            const content = document.getElementById('employer-content');
+            content.innerHTML = `
+      <div class="employees-list">
+        <h3>Выберите сотрудника</h3>
+        <div id="employees-for-docs" style="max-height: 400px; overflow-y: auto; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <p style="text-align: center; color: #666;">⏳ Загрузка сотрудников...</p>
         </div>
-      `;
-      loadEmployees(uid);
-    }
+      </div>
+    `;
+            loadEmployeesForDocuments(uid);
+        }
 
-    function loadEmployees(employerId) {
-      const emailsContainer = document.getElementById('employees-emails');
-      db.collection('invitations')
-        .where('employerId', '==', employerId)
-        .where('status', '==', 'accepted')
-        .get()
-        .then(snapshot => {
-          if (snapshot.empty) {
-            emailsContainer.innerHTML = '<p style="text-align: center; color: #666;">Нет принявших приглашение сотрудников</p>';
-            return;
-          }
+        function loadEmployees(employerId) {
+            const emailsContainer = document.getElementById('employees-emails');
+            db.collection('invitations')
+                .where('employerId', '==', employerId)
+                .where('status', '==', 'accepted')
+                .get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        emailsContainer.innerHTML = '<p style="text-align: center; color: #666;">Нет принявших приглашение сотрудников</p>';
+                        return;
+                    }
+                    const uniqueEmails = new Set();
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        if (data.employeeEmail) {
+                            uniqueEmails.add(data.employeeEmail);
+                        }
+                    });
+                    if (uniqueEmails.size === 0) {
+                        emailsContainer.innerHTML = '<p style="text-align: center; color: #666;">Нет сотрудников</p>';
+                    } else {
+                        emailsContainer.innerHTML = '';
+                        uniqueEmails.forEach(email => {
+                            const emailEl = document.createElement('div');
+                            emailEl.className = 'employee-email';
+                            emailEl.textContent = email;
+                            emailsContainer.appendChild(emailEl);
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('Ошибка загрузки сотрудников:', err);
+                    emailsContainer.innerHTML = '<p style="color: red; text-align: center;">Ошибка загрузки</p>';
+                });
+        }
 
-          const uniqueEmails = new Set();
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            if (data.employeeEmail) {
-              uniqueEmails.add(data.employeeEmail);
+        function loadEmployeesForDocuments(employerId) {
+            const container = document.getElementById('employees-for-docs');
+            db.collection('invitations')
+                .where('employerId', '==', employerId)
+                .where('status', '==', 'accepted')
+                .get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        container.innerHTML = '<p style="text-align: center; color: #666;">Нет сотрудников с документами</p>';
+                        return;
+                    }
+                    const uniqueEmails = new Set();
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        if (data.employeeEmail) {
+                            uniqueEmails.add(data.employeeEmail);
+                        }
+                    });
+                    if (uniqueEmails.size === 0) {
+                        container.innerHTML = '<p style="text-align: center; color: #666;">Нет сотрудников</p>';
+                    } else {
+                        container.innerHTML = '';
+                        uniqueEmails.forEach(email => {
+                            const emailEl = document.createElement('div');
+                            emailEl.className = 'employee-email';
+                            emailEl.style.cursor = 'pointer';
+                            emailEl.style.color = '#1a3c6e';
+                            emailEl.style.fontWeight = '500';
+                            emailEl.textContent = email;
+                            emailEl.onclick = () => showDocumentsOfEmployee(email);
+                            container.appendChild(emailEl);
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('Ошибка загрузки сотрудников для документов:', err);
+                    container.innerHTML = '<p style="color: red; text-align: center;">Ошибка загрузки</p>';
+                });
+        }
+
+        window.showDocumentsOfEmployee = function (employeeEmail) {
+            const content = document.getElementById('employer-content');
+            content.innerHTML = `
+      <div class="documents-list" style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+          <button onclick="showEmployeeDocuments()" class="back-to-chats-btn" style="padding: 6px 12px; font-size: 13px;">← Назад</button>
+          <h3>📄 Документы: ${employeeEmail}</h3>
+        </div>
+        <ul style="list-style: none; padding: 0; margin-top: 15px;">
+          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+            <strong>Трудовой договор</strong><br>
+            <small>Заключён 15.03.2025 с вашей компанией</small>
+          </li>
+          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+            <strong>Трудовая книжка</strong><br>
+            <small>Серия ТК-456789, выдана 10.04.2025</small>
+          </li>
+          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+            <strong>СНИЛС</strong><br>
+            <small>Номер: 123-456-789 00</small>
+          </li>
+          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+            <strong>Медицинская справка</strong><br>
+            <small>Действует до 30.11.2025</small>
+          </li>
+          <li style="padding: 12px 0;">
+            <strong>Паспорт РФ</strong><br>
+            <small>Серия 45 12, № 123456, выдан 01.01.2020</small>
+          </li>
+        </ul>
+      </div>
+    `;
+        };
+
+        window.sendInvitation = function () {
+            const employeeEmail = document.getElementById('employee-email').value;
+            const message = document.getElementById('invite-message').value;
+            const resultDiv = document.getElementById('invite-result');
+            if (!employeeEmail) {
+                resultDiv.innerHTML = '<p style="color: red; margin: 0;">Введите email работника</p>';
+                return;
             }
-          });
-
-          if (uniqueEmails.size === 0) {
-            emailsContainer.innerHTML = '<p style="text-align: center; color: #666;">Нет сотрудников</p>';
-          } else {
-            emailsContainer.innerHTML = '';
-            uniqueEmails.forEach(email => {
-              const emailEl = document.createElement('div');
-              emailEl.className = 'employee-email';
-              emailEl.textContent = email;
-              emailsContainer.appendChild(emailEl);
-            });
-          }
-        })
-        .catch(err => {
-          console.error('Ошибка загрузки сотрудников:', err);
-          emailsContainer.innerHTML = '<p style="color: red; text-align: center;">Ошибка загрузки</p>';
-        });
-    }
-
-    window.sendInvitation = function() {
-      const employeeEmail = document.getElementById('employee-email').value;
-      const message = document.getElementById('invite-message').value;
-      const resultDiv = document.getElementById('invite-result');
-      if (!employeeEmail) {
-        resultDiv.innerHTML = '<p style="color: red; margin: 0;">Введите email работника</p>';
-        return;
-      }
-      if (employeeEmail === currentUser.email) {
-        resultDiv.innerHTML = '<p style="color: red; margin: 0;">Нельзя отправить приглашение самому себе</p>';
-        return;
-      }
-      resultDiv.innerHTML = '<p style="color: #1a3c6e; margin: 0;">⏳ Отправка приглашения...</p>';
-      db.collection('invitations').add({
-        employerId: uid,
-        employerEmail: currentUser.email,
-        employeeEmail: employeeEmail,
-        message: message,
-        status: 'pending',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(() => {
-        resultDiv.innerHTML = '<p style="color: green; margin: 0;">✅ Приглашение успешно отправлено!</p>';
-        setTimeout(() => {
-          resultDiv.innerHTML = '';
-        }, 3000);
-      })
-      .catch(error => {
-        console.error('Ошибка отправки приглашения:', error);
-        resultDiv.innerHTML = '<p style="color: red; margin: 0;">❌ Ошибка отправки приглашения: ' + error.message + '</p>';
-      });
-    };
-
-    window.clearInviteForm = function() {
-      document.getElementById('employee-email').value = '';
-      document.getElementById('invite-message').value = '';
-      document.getElementById('invite-result').innerHTML = '';
-    };
-
-    window.refreshChats = function() {
-      loadEmployerChats(uid);
-    };
-
-    function loadEmployerChats(employerId) {
-      const chatsContainer = document.getElementById('chats-container');
-      chatsContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">⏳ Загрузка чатов...</p>';
-      db.collection('chats')
-        .get()
-        .then(snapshot => {
-          if (snapshot.empty) {
-            chatsContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Нет активных чатов</p>';
-            return;
-          }
-          chatsContainer.innerHTML = '';
-          let hasChats = false;
-          snapshot.forEach(chatDoc => {
-            const chat = chatDoc.data();
-            if (chat.employerId === employerId) {
-              hasChats = true;
-              const chatElement = document.createElement('div');
-              chatElement.className = 'chat-item';
-              const lastMessageTime = chat.lastMessageAt ? 
-                new Date(chat.lastMessageAt.toDate()).toLocaleString() : 
-                new Date(chat.createdAt?.toDate()).toLocaleString();
-              chatElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
-                  <strong style="color: #1a3c6e;">💬 Чат с ${chat.participantNames?.find(name => name !== currentUser.email) || 'работником'}</strong>
-                  <small style="color: #666; font-size: 11px;">${lastMessageTime}</small>
-                </div>
-                <div style="color: #555; font-size: 13px; margin-bottom: 5px;">
-                  ${chat.lastMessage || 'Чат только создан'}
-                </div>
-              `;
-              chatElement.onclick = () => openChat(chatDoc.id, chat);
-              chatsContainer.appendChild(chatElement);
+            if (employeeEmail === currentUser.email) {
+                resultDiv.innerHTML = '<p style="color: red; margin: 0;">Нельзя отправить приглашение самому себе</p>';
+                return;
             }
-          });
-          if (!hasChats) {
-            chatsContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Нет активных чатов</p>';
-          }
-        })
-        .catch(error => {
-          console.error('Ошибка загрузки чатов:', error);
-          chatsContainer.innerHTML = '<p style="color: red; text-align: center;">Ошибка загрузки чатов: ' + error.message + '</p>';
-        });
+            resultDiv.innerHTML = '<p style="color: #1a3c6e; margin: 0;">⏳ Отправка приглашения...</p>';
+            db.collection('invitations').add({
+                employerId: uid,
+                employerEmail: currentUser.email,
+                employeeEmail: employeeEmail,
+                message: message,
+                status: 'pending',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+                .then(() => {
+                    resultDiv.innerHTML = '<p style="color: green; margin: 0;">✅ Приглашение успешно отправлено!</p>';
+                    setTimeout(() => {
+                        resultDiv.innerHTML = '';
+                    }, 3000);
+                })
+                .catch(error => {
+                    console.error('Ошибка отправки приглашения:', error);
+                    resultDiv.innerHTML = '<p style="color: red; margin: 0;">❌ Ошибка отправки приглашения: ' + error.message + '</p>';
+                });
+        };
+
+        window.clearInviteForm = function () {
+            document.getElementById('employee-email').value = '';
+            document.getElementById('invite-message').value = '';
+            document.getElementById('invite-result').innerHTML = '';
+        };
+
+        window.refreshChats = function () {
+            loadEmployerChats(uid);
+        };
+
+        function loadEmployerChats(employerId) {
+            const chatsContainer = document.getElementById('chats-container');
+            chatsContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">⏳ Загрузка чатов...</p>';
+            db.collection('chats')
+                .get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        chatsContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Нет активных чатов</p>';
+                        return;
+                    }
+                    chatsContainer.innerHTML = '';
+                    let hasChats = false;
+                    snapshot.forEach(chatDoc => {
+                        const chat = chatDoc.data();
+                        if (chat.employerId === employerId) {
+                            hasChats = true;
+                            const chatElement = document.createElement('div');
+                            chatElement.className = 'chat-item';
+                            const lastMessageTime = chat.lastMessageAt ?
+                                new Date(chat.lastMessageAt.toDate()).toLocaleString() :
+                                new Date(chat.createdAt?.toDate()).toLocaleString();
+                            chatElement.innerHTML = `
+              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                <strong style="color: #1a3c6e;">💬 Чат с ${chat.participantNames?.find(name => name !== currentUser.email) || 'работником'}</strong>
+                <small style="color: #666; font-size: 11px;">${lastMessageTime}</small>
+              </div>
+              <div style="color: #555; font-size: 13px; margin-bottom: 5px;">
+                ${chat.lastMessage || 'Чат только создан'}
+              </div>
+            `;
+                            chatElement.onclick = () => openChat(chatDoc.id, chat);
+                            chatsContainer.appendChild(chatElement);
+                        }
+                    });
+                    if (!hasChats) {
+                        chatsContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Нет активных чатов</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки чатов:', error);
+                    chatsContainer.innerHTML = '<p style="color: red; text-align: center;">Ошибка загрузки чатов: ' + error.message + '</p>';
+                });
+        }
     }
-  }
 
   // Кабинет работника
   function loadEmployeeSection(uid, userData) {
@@ -380,11 +467,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>💬 Мои чаты</h3>
             <p>Общайтесь с компаниями</p>
           </div>
-          <div class="card">
+          <div class="card" onclick="showDocuments()">
             <h3>📄 Документы</h3>
             <p>Ваши документы</p>
           </div>
-          <div class="card">
+          <div class="card" onclick="showPayments()">
             <h3>💰 Выплаты</h3>
             <p>История выплат</p>
           </div>
@@ -395,6 +482,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.showInvitations = showInvitations;
     window.showActiveChats = showActiveChats;
+    window.showDocuments = showDocuments;
+    window.showPayments = showPayments;
 
     function showInvitations() {
       const content = document.getElementById('employee-content');
@@ -427,13 +516,88 @@ document.addEventListener('DOMContentLoaded', () => {
       loadEmployeeChats(uid);
     }
 
+    function showDocuments() {
+      const content = document.getElementById('employee-content');
+      content.innerHTML = `
+        <div class="documents-list" style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <h3>📄 Мои документы</h3>
+          <ul style="list-style: none; padding: 0; margin-top: 15px;">
+            <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+              <strong>Трудовой договор</strong><br>
+              <small>Заключён 15.03.2025 с ООО «Глобал Строй»</small>
+            </li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+              <strong>Трудовая книжка</strong><br>
+              <small>Серия ТК-456789, выдана 10.04.2025</small>
+            </li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+              <strong>СНИЛС</strong><br>
+              <small>Номер: 123-456-789 00</small>
+            </li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+              <strong>Медицинская справка</strong><br>
+              <small>Действует до 30.11.2025</small>
+            </li>
+            <li style="padding: 12px 0;">
+              <strong>Паспорт РФ</strong><br>
+              <small>Серия 45 12, № 123456, выдан 01.01.2020</small>
+            </li>
+          </ul>
+        </div>
+      `;
+    }
+
+    function showPayments() {
+      const content = document.getElementById('employee-content');
+      content.innerHTML = `
+        <div class="payments-list" style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <h3>💰 История выплат</h3>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px;">
+            <thead>
+              <tr style="background-color: #f5f7fa;">
+                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Дата</th>
+                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Компания</th>
+                <th style="padding: 10px; text-align: right; border-bottom: 2px solid #ddd;">Сумма</th>
+                <th style="padding: 10px; text-align: center; border-bottom: 2px solid #ddd;">Статус</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #eee;">01.10.2025</td>
+                <td style="padding: 10px; border-bottom: 1px solid #eee;">ООО «Глобал Строй»</td>
+                <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;">85 000 ₽</td>
+                <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee; color: green;">✅ Оплачено</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #eee;">01.09.2025</td>
+                <td style="padding: 10px; border-bottom: 1px solid #eee;">ООО «Глобал Строй»</td>
+                <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;">85 000 ₽</td>
+                <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee; color: green;">✅ Оплачено</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #eee;">01.08.2025</td>
+                <td style="padding: 10px; border-bottom: 1px solid #eee;">ООО «Глобал Строй»</td>
+                <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;">80 000 ₽</td>
+                <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee; color: green;">✅ Оплачено</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px;">15.07.2025</td>
+                <td style="padding: 10px;">ИП Петров А.В.</td>
+                <td style="padding: 10px; text-align: right;">42 500 ₽</td>
+                <td style="padding: 10px; text-align: center; color: orange;">⏳ В обработке</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
     window.refreshInvitations = function() {
       loadEmployeeInvitations();
     };
     window.refreshChats = function() {
       loadEmployeeChats(uid);
     };
-
     window.clearAllInvitations = function() {
       if (!confirm('Вы уверены, что хотите удалить все приглашения?')) return;
       db.collection('invitations')
@@ -708,7 +872,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageInput = document.getElementById('message-input');
     const messageText = messageInput.value.trim();
     if (!messageText || !currentChatId) return;
-
     db.collection('chats').doc(currentChatId).get()
       .then(chatDoc => {
         if (!chatDoc.exists) throw new Error('Чат не найден');

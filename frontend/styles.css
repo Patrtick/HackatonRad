@@ -277,26 +277,8 @@ footer {
 #chats-container {
   padding: 0;
   margin: 0;
-  max-height: 400px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #1a3c6e transparent;
-}
-
-#invitations-container::-webkit-scrollbar,
-#chats-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-#invitations-container::-webkit-scrollbar-track,
-#chats-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-#invitations-container::-webkit-scrollbar-thumb,
-#chats-container::-webkit-scrollbar-thumb {
-  background-color: #1a3c6e;
-  border-radius: 4px;
+  max-height: none !important;
+  overflow-y: visible !important;
 }
 
 .invitation-item,
@@ -400,8 +382,8 @@ footer {
 
 /* --- Список сотрудников --- */
 .employees-list {
-  margin-top: 20px;
-  padding: 15px;
+  margin-top: 10px;
+  padding: 10px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -423,6 +405,45 @@ footer {
   border-bottom: none;
 }
 
+#employees-emails {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* --- Контент кабинета сотрудника — фикс переполнения --- */
+#employee-content,
+#employer-content {
+  width: 100%;
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
+  padding: 0 10px;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #1a3c6e transparent;
+}
+
+#employee-content::-webkit-scrollbar,
+#employer-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+#employee-content::-webkit-scrollbar-track,
+#employer-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#employee-content::-webkit-scrollbar-thumb,
+#employer-content::-webkit-scrollbar-thumb {
+  background-color: #1a3c6e;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  #employee-content,
+  #employer-content {
+    max-height: calc(100vh - 270px);
+  }
+}
 /* --- Адаптивность --- */
 @media (max-width: 768px) {
   header h1 { font-size: 20px; }
